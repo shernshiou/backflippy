@@ -4,12 +4,20 @@
   "name": "One-click Kittens",
   "description": "This extension demonstrates a 'browser action' with kittens.",
   "version": "1.0",
-
-  "browser_action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html"
+  "background": {
+    "scripts": ["background.js"]
   },
-  "permissions": [
-    "https://secure.flickr.com/"
-  ]
+  "icons": {
+    "16": "images/stack16.png",
+    "48": "images/stack48.png",
+    "128": "images/stack128.png"
+  },
+  "browser_action": {
+    "default_icon": {
+      "19": "images/stack19.png",
+      "38": "images/stack38.png"
+    },
+    "default_title": "Backflip"
+  },
+  "permissions" : ["contextMenus"]
 }
