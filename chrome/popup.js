@@ -29,7 +29,7 @@ for (var i = 0; i < localStorage.length; i++){
       item
       	.append($('<div class="status-malicious">'))
       	.append($('<div class="url">').text(filename))
-      	.append($('<div class="description">').text("The file has been infected by " + localStorage.getItem(localStorage.key(i))));
+      	.append($('<div class="description">').text("The file is malicious. Do not download it."));
     break;
   }
 
