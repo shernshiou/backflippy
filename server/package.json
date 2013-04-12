@@ -6,6 +6,9 @@
 	"dependencies": {
 		"restify": "2.4.x",
 		"requirejs": "*",
-		"jquery": "*"
+		"jquery": "*",
+		"mime": "*",
+		"file-api": "*",
+		"remedial": "*"
 	}
 }

@@ -93,15 +93,17 @@ define(["FsioVersion", "FsioBase", "FsioTicket", "FsioContent", "FsioData", "Fsi
                 }
                 var errors = 0;
                 var pending = 0;
+                var error_msg = "";
                 var items = JSON.parse(jqXHR.responseText).Items;
                 if(items) {
                     var av = items[0];
                     var ws = items[0].WorkerStatuses;
                     for(var i = 0; i < workers.length; i++) {
                         var status = "";
-                        if(workers[i] == "AV")
+                        if(workers[i] == "AV") {
                             status = _getWorkerStatus(av, "AV");
-                        else
+                            error_msg = status;
+                        } else
                             status = _getWorkerStatus(ws, workers[i]);
                         console.log("worker: " + workers[i] +
                                       ", status: " + status);
@@ -116,7 +118,8 @@ define(["FsioVersion", "FsioBase", "FsioTicket", "FsioContent", "FsioData", "Fsi
                     complete("error");
                 } else if(0 === pending) {
                     // all workers done
-                    complete("success");
+                    //complete("success");
+                    complete(error_msg);
                 } else {
                     // try again after one second
                     setTimeout(loop, 1000, self);
