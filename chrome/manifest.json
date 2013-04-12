@@ -36,9 +36,11 @@
     "contextMenus",
     "notifications",
     "storage",
+    "http://fsec.it/*",
     "https://devapi-fip.sp.f-secure.com/*",
     "https://oneid-fip.sp.f-secure.com/*",
     "https://data-fip.sp.f-secure.com/*",
-    "http://10.70.72.124:8080/*"
+    "http://10.70.72.124:8080/*",
+    "http://www.google.com/*"
   ]
 }
