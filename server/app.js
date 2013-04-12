@@ -3,7 +3,8 @@ var restify = require('restify'),
     url = require('url'),
     path = require('path'),
     fs = require('fs'),
-    events = require('events');
+    events = require('events'),
+    redis = require('redis');
 
 var createTicket = function(req, res, next) {
 	// Attempt to download the File
@@ -12,7 +13,12 @@ var createTicket = function(req, res, next) {
 	    host = parsedUrl.hostname,
 	    pathname = parsedUrl.pathname,
 	    filename = pathname.split("/").pop(),
-	    request;
+	    request,
+	    redisClient = redis.createClient();
+
+	redisClient.on("error", function(err) {
+		console.error("Error " + err);
+	});
 
 	request = http.request({
 		hostname: host,
@@ -27,6 +33,7 @@ var createTicket = function(req, res, next) {
 		}
 
 		// the file is being downloaded - return 202
+		redisClient.set(requestedUrl, "pending");
 		res.send(202);
 
 		var file = fs.createWriteStream(filename, {'flags': 'a'});
@@ -38,6 +45,9 @@ var createTicket = function(req, res, next) {
 		response.on("end", function() {
 			file.end();
 			console.debug("Finished downloading " + filename);
+			// upload to CAN for scanning
+			// remove the file after it is scanned
+			redisClient.set(requestedUrl, "malicious/safe");
 		});
 	});
 
