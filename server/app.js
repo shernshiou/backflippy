@@ -34,6 +34,8 @@ var createTicket = function(req, res, next) {
 
 		// the file is being downloaded - return 202
 		redisClient.set(requestedUrl, "pending");
+		redisClient.lpush("single_user", requestedUrl);
+
 		res.send(202);
 
 		var file = fs.createWriteStream(filename, {'flags': 'a'});
