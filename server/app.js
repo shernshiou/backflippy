@@ -30,14 +30,14 @@ var createTicket = function(req, res, next) {
 		res.send(202);
 
 		var file = fs.createWriteStream(filename, {'flags': 'a'});
-		console.log("File size " + filename + ": " + response.headers['content-length'] + " bytes.");
+		console.debug("File size " + filename + ": " + response.headers['content-length'] + " bytes.");
 		response.on('data', function (chunk) {
 			file.write(chunk, encoding='binary');
 		});
 
 		response.on("end", function() {
 			file.end();
-			console.log("Finished downloading " + filename);
+			console.debug("Finished downloading " + filename);
 		});
 	});
 
