@@ -52,7 +52,7 @@ var server = restify.createServer({
 	name: "Backflippy"
 });
 server.use(restify.bodyParser());
-server.post('/ticket', createTicket);
+server.post('/tickets', createTicket);
 
 server.listen(8080, function() {
 	console.log('%s is now running at %s', server.name, server.url);
