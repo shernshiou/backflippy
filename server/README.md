@@ -2,7 +2,7 @@
 
 ## API Design
 
-### 1. POST /ticket
+### 1. POST /tickets
 
 Start a new scan operation.
     
@@ -18,37 +18,31 @@ Success. A new scan operation is started.
 
 `id` - ID of the scan operation
 
-##### 208
-
-Success. The file has already been scanned before. The previous result is returned.
-
-`result` - Status of the scan operation, i.e. `malicious`, `safe`
-
 ##### 400
 
 Failed due to invalid parameters.
 
-##### 401
 
-Authentication failed.
+### 2. GET /tickets
 
-
-### 2. GET /ticket/:id
-
-Get the result of the scan.
+Get the results of all scans.
     
 #### Input
 
-`id` - ID of the scan operation
+No input is required.
     
 #### Output
 
 ##### 200
 
-Success. The scan is completed.
+Success. The scan is completed. A JSON object containing the list of downloads and their status is returned.
 
-`result` - Status of the scan operation, i.e. `malicious`, `safe`
+Example:
 
-##### 202
-
-Scanning in progress.
+```json
+{
+	"http://nodejs.org/dist/v0.10.4/node-v0.10.4.pkg": "safe",
+	"http://github-windows.s3.amazonaws.com/GitHubSetup.exe": "pending",
+	"http://malicious.com/virus.exe": "malicious"
+}
+```
