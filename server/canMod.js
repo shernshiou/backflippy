@@ -19,7 +19,7 @@ Swiper.prototype.uploadLocalFile = function(file, complete) {
   fs.readFile(file, 'ascii', function (err, data) {
     if (err) throw err;
     uploadBuffer(this.ctx, name, data, type, function(status) {
-      if (complete) complete(status);
+      if (complete) complete(file, status);
     });
   });
 }
@@ -34,7 +34,7 @@ var uploadBuffer = function(ctx, fileName, buffer, ctype, complete) {
     }, {}, {"content-type": ctype ? ctype : ""});
 }
 
-function Swiper(uuid, ticket, token) {
+var Swiper = function(uuid, ticket, token) {
   requirejs.config({
       nodeRequire: require,
       baseUrl: 'lib'
@@ -63,7 +63,13 @@ function Swiper(uuid, ticket, token) {
   });
 }
 
+module.exports = Swiper;
+
+/*
 var s = new Swiper("ec463834-408e-3558-82dc-6c3c3207a226", // UUID
   "357358e6-4de1-0b5b-06d0-9ad8ea2677f0", // Ticket
   "edd0d4f5-a0db-68e6-700d-c726a7f2088f"); // Token
-s.uploadLocalFile('/home/cngan/Desktop/vilus/eicar.com');
+s.uploadLocalFile('/home/cngan/Desktop/vilus/eicar.com', function(file, status) {
+  console.log("file: " + file + ", " + status);
+});
+*/
