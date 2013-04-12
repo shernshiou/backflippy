@@ -1,18 +1,24 @@
 var restify = require('restify'),
-    http = require('http'),
-    url = require('url'),
-    path = require('path'),
-    fs = require('fs'),
-    events = require('events');
+	http = require('http'),
+	url = require('url'),
+	path = require('path'),
+	fs = require('fs'),
+	events = require('events'),
+	redis = require('redis');
 
 var createTicket = function(req, res, next) {
 	// Attempt to download the File
 	var requestedUrl = req.params.url,
 		parsedUrl = url.parse(requestedUrl),
-	    host = parsedUrl.hostname,
-	    pathname = parsedUrl.pathname,
-	    filename = pathname.split("/").pop(),
-	    request;
+		host = parsedUrl.hostname,
+		pathname = parsedUrl.pathname,
+		filename = pathname.split("/").pop(),
+		request,
+		redisClient = redis.createClient();
+
+	redisClient.on("error", function(err) {
+		console.error("Error " + err);
+	});
 
 	request = http.request({
 		hostname: host,
@@ -27,6 +33,9 @@ var createTicket = function(req, res, next) {
 		}
 
 		// the file is being downloaded - return 202
+		redisClient.set(requestedUrl, "pending");
+		redisClient.lpush("single_user", requestedUrl);
+
 		res.send(202);
 
 		var file = fs.createWriteStream(filename, {'flags': 'a'});
@@ -38,6 +47,12 @@ var createTicket = function(req, res, next) {
 		response.on("end", function() {
 			file.end();
 			console.log("Finished downloading " + filename);
+			// upload to CAN for scanning
+			fs.unlink(filename, function(err) {
+				if (err) console.error("Error " + err);
+				console.log("Successfully deleted " + filename);
+			});
+			redisClient.set(requestedUrl, "virusname");
 		});
 	});
 
@@ -48,11 +63,35 @@ var createTicket = function(req, res, next) {
 	return next();
 };
 
+var listTickets = function(req, res, next) {
+	// get the data from redis
+	var redisClient = redis.createClient();
+
+	redisClient.on("error", function(err) {
+		console.error("Error " + err);
+	});
+
+	redisClient.lrange("single_user", 0, 10, function(err, urls){
+		var list = {};
+		urls.forEach(function(key, pos){
+			redisClient.get(key, function(err, value){
+				list[key] = value;
+				if (pos == urls.length - 1) {
+					res.send(200, list);
+				}
+			});
+		});
+	});
+
+	return next();
+};
+
 var server = restify.createServer({
 	name: "Backflippy"
 });
 server.use(restify.bodyParser());
-server.post('/ticket', createTicket);
+server.post('/tickets', createTicket);
+server.get('/tickets', listTickets);
 
 server.listen(8080, function() {
 	console.log('%s is now running at %s', server.name, server.url);

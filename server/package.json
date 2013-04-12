@@ -5,6 +5,9 @@
 	"private": true,
 	"dependencies": {
 		"restify": "2.4.x",
+		"redis": "0.8.x",
+		"hiredis": "0.1.x",
+		"restify": "2.4.x",
 		"requirejs": "*",
 		"jquery": "*"
 	}
