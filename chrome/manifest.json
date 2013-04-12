@@ -29,12 +29,13 @@
     "default_popup": "popup.html"
   },
   "web_accessible_resources": [
-    "48.png"
+    "stack48.png"
   ],
   "permissions" : [
     "tabs",
     "contextMenus",
     "notifications",
+    "storage",
     "https://devapi-fip.sp.f-secure.com/*",
     "https://oneid-fip.sp.f-secure.com/*",
     "https://data-fip.sp.f-secure.com/*",

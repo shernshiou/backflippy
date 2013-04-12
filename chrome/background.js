@@ -1,3 +1,4 @@
+var count = 0;
 var getClickHandler = function(info, tab) {
   console.log(info);
   chrome.browserAction.setBadgeText({text: "Up"});
@@ -6,8 +7,18 @@ var getClickHandler = function(info, tab) {
   });
 }
 
+var retrieve = function() {
+  ++count;
+  localStorage.setItem(count, count);
+}
+
+//setInterval(retrieve, 8000);
+
 // Default Badge Colour
 chrome.browserAction.setBadgeBackgroundColor({color: [0, 200, 0, 100]});
+//chrome.browserAction.onClicked.addListener(function(){
+//  chrome.tabs.create({url: "popup.html"});
+//});
 
 // Context Menu
 chrome.contextMenus.create({
