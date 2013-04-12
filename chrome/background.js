@@ -20,8 +20,16 @@ var checkForMaliciousUrl = function(tabId, changeInfo, tab) {
 
 var retrieve = function() {
   $.get("http://10.70.72.124:8080/tickets", function(data){
+    var i = 0,
+        ticket = localStorage.getItem("ticket"),
+        token = localStorage.getItem("token"),
+        uuid = localStorage.getItem("uuid");
+    localStorage.clear();
+    localStorage.setItem("ticket", ticket);
+    localStorage.setItem("token", token);
+    localStorage.setItem("uuid", uuid);
     $.each(data, function(key, value){
-      localStorage.setItem(key, value);
+      localStorage.setItem( i++ + " " + key, value);
     });
   });
 }
