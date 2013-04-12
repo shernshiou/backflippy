@@ -4,7 +4,18 @@ var restify = require('restify'),
 	path = require('path'),
 	fs = require('fs'),
 	events = require('events'),
-	redis = require('redis');
+	redis = require('redis'),
+	Sweeper = require('./sweeper');
+
+/*
+var sweeper = new Sweeper('ec463834-408e-3558-82dc-6c3c3207a226', //UUID
+	'eff0b086-79ad-4aca-7065-db88477f3719', //TICKET
+	'4eeb0471-e6f9-43cf-00c8-66ed057e5c0d');  //TOKEN
+
+sweeper.swipe('package.json', function(file, status){
+	console.log(status);
+});
+*/
 
 var createTicket = function(req, res, next) {
 	// Attempt to download the File

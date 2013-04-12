@@ -12,18 +12,6 @@ var waitUntilScanned = function(ctx, fileName, complete) {
     });
 }
 
-Swiper.prototype.uploadLocalFile = function(file, complete) {
-  var type = mime.lookup(file);
-  var name = path.basename(file);
-  var content;
-  fs.readFile(file, 'ascii', function (err, data) {
-    if (err) throw err;
-    uploadBuffer(this.ctx, name, data, type, function(status) {
-      if (complete) complete(file, status);
-    });
-  });
-}
-
 var uploadBuffer = function(ctx, fileName, buffer, ctype, complete) {
     ctx.fsio.data.upload(ctx.token, fileName, buffer, function(jqXHR) {
         if (jqXHR.status == 204) {
@@ -34,7 +22,7 @@ var uploadBuffer = function(ctx, fileName, buffer, ctype, complete) {
     }, {}, {"content-type": ctype ? ctype : ""});
 }
 
-var Swiper = function(uuid, ticket, token) {
+var Sweeper = function(uuid, ticket, token) {
   requirejs.config({
       nodeRequire: require,
       baseUrl: 'lib'
@@ -63,13 +51,16 @@ var Swiper = function(uuid, ticket, token) {
   });
 }
 
-module.exports = Swiper;
+Sweeper.prototype.sweep = function(file, complete) {
+  var type = mime.lookup(file);
+  var name = path.basename(file);
+  var content;
+  fs.readFile(file, 'ascii', function (err, data) {
+    if (err) throw err;
+    uploadBuffer(this.ctx, name, data, type, function(status) {
+      if (complete) complete(file, status);
+    });
+  });
+}
 
-/*
-var s = new Swiper("ec463834-408e-3558-82dc-6c3c3207a226", // UUID
-  "357358e6-4de1-0b5b-06d0-9ad8ea2677f0", // Ticket
-  "edd0d4f5-a0db-68e6-700d-c726a7f2088f"); // Token
-s.uploadLocalFile('/home/cngan/Desktop/vilus/eicar.com', function(file, status) {
-  console.log("file: " + file + ", " + status);
-});
-*/
+module.exports = Sweeper;
