@@ -1,0 +1,9 @@
+{
+	"name": "backflippy",
+	"description": "Server side codes for Backflippy",
+	"version": "0.0.1",
+	"private": true,
+	"dependencies": {
+		"restify": "2.4.x"
+	}
+}
