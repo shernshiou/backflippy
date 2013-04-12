@@ -6,5 +6,8 @@
 	"dependencies": {
 		"restify": "2.4.x",
 		"redis": "0.8.x"
+		"restify": "2.4.x",
+		"requirejs": "*",
+		"jquery": "*"
 	}
 }

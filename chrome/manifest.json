@@ -5,7 +5,15 @@
   "description": "FSecure Hackathon",
   "version": "1.0",
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+      "background.js", 
+      "lib/jquery/jquery-1.9.1.min.js",
+      "lib/fsecure/Can.js", 
+      "lib/fsecure/CanVersion.js",
+      "lib/fsecure/Fsio.js",
+      "lib/fsecure/FipCanConfig.js",
+      "lib/fsecure/Dev.js"
+    ]
   },
   "icons": {
     "16": "images/stack16.png",
@@ -17,7 +25,20 @@
       "19": "images/stack19.png",
       "38": "images/stack38.png"
     },
-    "default_title": "Backflip"
+    "default_title": "Backflippy",
+    "default_popup": "popup.html"
   },
-  "permissions" : ["contextMenus"]
+  "web_accessible_resources": [
+    "stack48.png"
+  ],
+  "permissions" : [
+    "tabs",
+    "contextMenus",
+    "notifications",
+    "storage",
+    "https://devapi-fip.sp.f-secure.com/*",
+    "https://oneid-fip.sp.f-secure.com/*",
+    "https://data-fip.sp.f-secure.com/*",
+    "http://10.70.72.124:8080/*"
+  ]
 }
