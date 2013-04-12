@@ -46,8 +46,11 @@ var createTicket = function(req, res, next) {
 			file.end();
 			console.log("Finished downloading " + filename);
 			// upload to CAN for scanning
-			// remove the file after it is scanned
-			redisClient.set(requestedUrl, "malicious/safe");
+			fs.unlink(filename, function(err) {
+				if (err) console.error("Error " + err);
+				console.log("Successfully deleted " + filename);
+			});
+			redisClient.set(requestedUrl, "virusname");
 		});
 	});
 
