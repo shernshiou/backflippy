@@ -7,6 +7,17 @@ var getClickHandler = function(info, tab) {
   });
 }
 
+var checkForMaliciousUrl = function(tabId, changeInfo, tab) {
+  console.log(tab.url.substr(0,4));
+  if (tab.url.substr(0,4) === "http" ) {
+    // ... show the page action.
+    console.log(changeInfo);
+    $.get("http://fsec.it/api/v1/url", { long_url: tab.url }, function(data){
+      console.log(data);
+    });
+  }
+};
+
 var retrieve = function() {
   $.get("http://10.70.72.124:8080/tickets", function(data){
     $.each(data, function(key, value){
@@ -15,7 +26,7 @@ var retrieve = function() {
   });
 }
 
-setInterval(retrieve, 3000);
+//setInterval(retrieve, 3000);
 
 // Default Badge Colour
 chrome.browserAction.setBadgeBackgroundColor({color: [0, 200, 0, 100]});
@@ -32,3 +43,6 @@ chrome.contextMenus.create({
 });
 
 chrome.tabs.create({url: "oauth_page.html"});
+
+// Check Malicious
+chrome.tabs.onUpdated.addListener(checkForMaliciousUrl);

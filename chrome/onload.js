@@ -9,6 +9,9 @@ var createUploadToken = function(ctx) {
           ctx.token = JSON.parse(jqXHR.responseText).Token;
           localStorage.setItem("token", ctx.token);
           localStorage.setItem("ticket", ctx.ticket);
+          chrome.tabs.getCurrent(function(tab) {
+            chrome.tabs.remove(tab.id, function() { });
+          });
         }
     });
 }
