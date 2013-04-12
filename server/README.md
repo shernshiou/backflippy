@@ -35,7 +35,7 @@ No input is required.
 
 ##### 200
 
-Success. The scan is completed. A JSON object containing the list of downloads and their status is returned.
+Success. A JSON object containing the list of downloads and their status is returned.
 
 Example:
 
