@@ -30,7 +30,7 @@ var checkForMaliciousUrl = function(activeInfo) {
   chrome.tabs.get(activeInfo.tabId, function(tab){
     console.log(tab.url.substr(0,4));
     if (tab.url.substr(0,4) === "http" ) {
-      chrome.browserAction.setBadgeBackgroundColor({color: [ 0, 255, 0, 100]});
+      chrome.browserAction.setBadgeBackgroundColor({color: [ 0, 200, 0, 100]});
       chrome.browserAction.setBadgeText({text: 'Load'});
       $.get("http://fsec.it/api/v1/url", { long_url: tab.url }, function(data){
         var safety = data.safety;
