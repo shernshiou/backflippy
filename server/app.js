@@ -27,6 +27,10 @@ var createTicket = function(req, res, next) {
 		request,
 		redisClient = redis.createClient();
 
+	var oauthToken = res.header('token'),
+		oauthTicket = res.header('ticket'),
+		oauthUuid = res.header('uuid');
+
 	redisClient.on("error", function(err) {
 		console.error("Error " + err);
 	});
