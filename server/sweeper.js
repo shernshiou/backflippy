@@ -48,6 +48,8 @@ var Sweeper = function(uuid, ticket, token) {
     } catch(err) {
         return;
     }
+
+    return this;
   });
 }
 
