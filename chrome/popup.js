@@ -5,10 +5,10 @@ for (var i = 0; i < localStorage.length; i++){
   	continue;
   }
 
-  match = localStorage.key(i).match(/^\d (.*)$/i);
+  match = localStorage.key(i).match(/^\d+ (.*)$/i);
   url = match[1];
 
-  match = localStorage.key(i).match(/^\d .*\/(.+)$/);
+  match = localStorage.key(i).match(/^\d+ .*\/(.+)$/);
   filename = match[1];
 
   item = $('<li>');

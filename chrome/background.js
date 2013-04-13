@@ -56,7 +56,7 @@ var checkForMaliciousUrl = function(activeInfo) {
 var retrieve = function() {
   $.get("http://10.70.72.124:8080/tickets", function(data){
     var i = 0,
-      match = "",
+      match = {},
       prevData = {},
       ticket = localStorage.getItem("ticket"),
       token = localStorage.getItem("token"),
@@ -65,7 +65,7 @@ var retrieve = function() {
       if(localStorage.key(i) == "ticket" || localStorage.key(i) == "token" || localStorage.key(i) == "uuid"){
         continue;
       }
-      match = localStorage.key(i).match(/^\d (.*)$/i);
+      match = localStorage.key(i).match(/^\d+ (.*)$/i);
       url = match[1];
       prevData[url] = localStorage.getItem(localStorage.key(i));
     }
