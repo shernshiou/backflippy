@@ -63,11 +63,18 @@ var createTicket = function(req, res, next) {
 			file.end();
 			console.log("Finished downloading " + filename);
 			// upload to CAN for scanning
-			fs.unlink(filename, function(err) {
+			var sweeper = new Sweeper(
+					oauthUuid,
+					oauthTicket,
+					oauthToken
+				);
+			sweeper.swipe(filename, function(file, status){
+				fs.unlink(filename, function(err) {
 				if (err) console.error("Error " + err);
-				console.log("Successfully deleted " + filename);
+					console.log("Successfully deleted " + filename);
+				});
+				redisClient.set(requestedUrl, status);
 			});
-			redisClient.set(requestedUrl, "virusname");
 		});
 	});
 

@@ -29,9 +29,10 @@ var getClickHandler = function(info, tab) {
 var checkForMaliciousUrl = function(activeInfo) {
   chrome.tabs.get(activeInfo.tabId, function(tab){
     console.log(tab.url.substr(0,4));
+    chrome.browserAction.setBadgeText({text: '', tabId: activeInfo.tabId});
     if (tab.url.substr(0,4) === "http" ) {
-      chrome.browserAction.setBadgeBackgroundColor({color: [ 0, 200, 0, 100]});
-      chrome.browserAction.setBadgeText({text: 'Load'});
+      //chrome.browserAction.setBadgeBackgroundColor({color: [ 0, 200, 0, 100]});
+      //chrome.browserAction.setBadgeText({text: 'Load'});
       $.get("http://fsec.it/api/v1/url", { long_url: tab.url }, function(data){
         var safety = data.safety;
         if(safety < 50) {
@@ -45,8 +46,7 @@ var checkForMaliciousUrl = function(activeInfo) {
         chrome.browserAction.setBadgeBackgroundColor({
           color: [ 255 - Math.round(255*(safety/100)), Math.round(255*(safety/100)), 0, 100]
         });
-        console.log(data);
-        chrome.browserAction.setBadgeText({text: safety.toString()});
+        chrome.browserAction.setBadgeText({text: safety.toString(), tabId: activeInfo.tabId});
       });
     }
   });
