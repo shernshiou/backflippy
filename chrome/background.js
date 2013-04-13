@@ -5,10 +5,11 @@ var getClickHandler = function(info, tab) {
   ticket = localStorage.getItem("ticket"),
   token = localStorage.getItem("token"),
   uuid = localStorage.getItem("uuid");
+  console.log(info);
   $.ajax({
     type: "POST",
     url: "http://10.70.72.124:8080/tickets",
-    data: { url: info.srcUrl },
+    data: { url: info.linkUrl },
     headers: { 
       "ticket":  ticket,
       "token": token,
@@ -86,7 +87,7 @@ var retrieve = function() {
   });
 }
 
-//setInterval(retrieve, 3000);
+setInterval(retrieve, 3000);
 
 // Default Badge Colour
 //chrome.browserAction.onClicked.addListener(function(){
@@ -97,7 +98,7 @@ var retrieve = function() {
 chrome.contextMenus.create({
   "title": "Check link",
   "type": "normal",
-  "contexts": ["image"],
+  "contexts": ["link"],
   "onclick": getClickHandler
 });
 
