@@ -64,6 +64,7 @@ var retrieve = function() {
           'You\'ve got backflipped',  // notification title
           'The file ' + value + ' has completed.'  // notification body text
         );
+        notification.show();
       }
       localStorage.setItem( i++ + " " + key, value);
     });
