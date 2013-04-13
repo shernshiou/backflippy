@@ -71,8 +71,8 @@ var createTicket = function(req, res, next) {
 					if (err) console.error("Error " + err);
 					console.log("Successfully deleted " + filename);
 				});
-				if (status[0] != "ok" && status[1]) {
-					redisClient.set(requestedUrl, status[1]);
+				if (status[0] != "ok") {
+					redisClient.set(requestedUrl, "malicious");
 				} else {
 					redisClient.set(requestedUrl, "safe");
 				}
