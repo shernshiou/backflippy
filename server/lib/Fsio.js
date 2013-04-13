@@ -60,6 +60,12 @@ define(["FsioVersion", "FsioBase", "FsioTicket", "FsioContent", "FsioData", "Fsi
             return worker.status;
     }
 
+    function _getAVDetection(json) {
+        var worker = json["AV"];
+        if (worker)
+            return worker.detection;
+    }
+
     /**
      * Wait for the workers to finish processing uploaded file.
      * Only for testing purposes.
@@ -94,6 +100,7 @@ define(["FsioVersion", "FsioBase", "FsioTicket", "FsioContent", "FsioData", "Fsi
                 var errors = 0;
                 var pending = 0;
                 var error_msg = "";
+                var status_msg = "";
                 var items = JSON.parse(jqXHR.responseText).Items;
                 if(items) {
                     var av = items[0];
@@ -102,7 +109,8 @@ define(["FsioVersion", "FsioBase", "FsioTicket", "FsioContent", "FsioData", "Fsi
                         var status = "";
                         if(workers[i] == "AV") {
                             status = _getWorkerStatus(av, "AV");
-                            error_msg = status;
+                            status_msg = status;
+                            error_msg = _getAVDetection(av)
                         } else
                             status = _getWorkerStatus(ws, workers[i]);
                         console.log("worker: " + workers[i] +
@@ -118,8 +126,8 @@ define(["FsioVersion", "FsioBase", "FsioTicket", "FsioContent", "FsioData", "Fsi
                     complete("error");
                 } else if(0 === pending) {
                     // all workers done
-                    //complete("success");
-                    complete(error_msg);
+                    var ret = [status_msg,error_msg];
+                    complete(ret);
                 } else {
                     // try again after one second
                     setTimeout(loop, 1000, self);
