@@ -35,3 +35,9 @@ for (var i = 0; i < localStorage.length; i++){
 
   $('#filelist').append(item);
 }
+
+$('a').click(function(e) {
+  var href = e.currentTarget.href;
+  chrome.tabs.create({url: href});
+  window.close(); // To close the popup.
+});
