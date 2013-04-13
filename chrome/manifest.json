@@ -29,7 +29,7 @@
     "default_popup": "popup.html"
   },
   "web_accessible_resources": [
-    "stack48.png"
+    "images/stack48.png"
   ],
   "permissions" : [
     "tabs",

@@ -1,10 +1,29 @@
 var count = 0;
 var getClickHandler = function(info, tab) {
-  console.log(info);
-  chrome.browserAction.setBadgeText({text: "Up"});
-  $.post("http://10.70.72.124:8080/tickets", { url: info.srcUrl }, function(data){
-    console.log(data);
+  //console.log(info);
+  //chrome.browserAction.setBadgeText({text: "Up"});
+  ticket = localStorage.getItem("ticket"),
+  token = localStorage.getItem("token"),
+  uuid = localStorage.getItem("uuid");
+  $.ajax({
+    type: "POST",
+    url: "http://10.70.72.124:8080/tickets",
+    data: { url: info.srcUrl },
+    headers: { 
+      "ticket":  ticket,
+      "token": token,
+      "uuid": uuid
+    },
+    statusCode: {
+
+    },
+    success: function(data){
+    
+    }
   });
+  //$.post("http://10.70.72.124:8080/tickets", { url: info.srcUrl }, function(data){
+  //  console.log(data);
+  //});
 }
 
 var checkForMaliciousUrl = function(tabId, changeInfo, tab) {
@@ -21,14 +40,31 @@ var checkForMaliciousUrl = function(tabId, changeInfo, tab) {
 var retrieve = function() {
   $.get("http://10.70.72.124:8080/tickets", function(data){
     var i = 0,
-        ticket = localStorage.getItem("ticket"),
-        token = localStorage.getItem("token"),
-        uuid = localStorage.getItem("uuid");
+      match = "",
+      prevData = {},
+      ticket = localStorage.getItem("ticket"),
+      token = localStorage.getItem("token"),
+      uuid = localStorage.getItem("uuid");
+    for (var i = 0; i < localStorage.length; i++){
+      if(localStorage.key(i) == "ticket" || localStorage.key(i) == "token" || localStorage.key(i) == "uuid"){
+        continue;
+      }
+      match = localStorage.key(i).match(/^\d (.*)$/i);
+      url = match[1];
+      prevData[url] = localStorage.getItem(localStorage.key(i));
+    }
     localStorage.clear();
     localStorage.setItem("ticket", ticket);
     localStorage.setItem("token", token);
     localStorage.setItem("uuid", uuid);
     $.each(data, function(key, value){
+      if(prevData[key] != value){
+        var notification = webkitNotifications.createNotification(
+          'images/stack48.png',  // icon url - can be relative
+          'You\'ve got backflipped',  // notification title
+          'The file ' + value + ' has completed.'  // notification body text
+        );
+      }
       localStorage.setItem( i++ + " " + key, value);
     });
   });
