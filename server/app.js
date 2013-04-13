@@ -25,11 +25,10 @@ var createTicket = function(req, res, next) {
 		pathname = parsedUrl.pathname,
 		filename = pathname.split("/").pop(),
 		request,
-		redisClient = redis.createClient();
-
-	var oauthToken = res.header('token'),
-		oauthTicket = res.header('ticket'),
-		oauthUuid = res.header('uuid');
+		redisClient = redis.createClient(),
+		oauthToken = req.header('token'),
+		oauthTicket = req.header('ticket'),
+		oauthUuid = req.header('uuid');]
 
 	redisClient.on("error", function(err) {
 		console.error("Error " + err);
@@ -67,10 +66,9 @@ var createTicket = function(req, res, next) {
 					oauthUuid,
 					oauthTicket,
 					oauthToken
-				);
-			sweeper.swipe(filename, function(file, status){
+				).sweep(filename, function(file, status){
 				fs.unlink(filename, function(err) {
-				if (err) console.error("Error " + err);
+					if (err) console.error("Error " + err);
 					console.log("Successfully deleted " + filename);
 				});
 				redisClient.set(requestedUrl, status);

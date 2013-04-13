@@ -5,10 +5,11 @@ var getClickHandler = function(info, tab) {
   ticket = localStorage.getItem("ticket"),
   token = localStorage.getItem("token"),
   uuid = localStorage.getItem("uuid");
+  console.log(info);
   $.ajax({
     type: "POST",
     url: "http://10.70.72.124:8080/tickets",
-    data: { url: info.srcUrl },
+    data: { url: info.linkUrl },
     headers: { 
       "ticket":  ticket,
       "token": token,
@@ -55,7 +56,7 @@ var checkForMaliciousUrl = function(activeInfo) {
 var retrieve = function() {
   $.get("http://10.70.72.124:8080/tickets", function(data){
     var i = 0,
-      match = "",
+      match = {},
       prevData = {},
       ticket = localStorage.getItem("ticket"),
       token = localStorage.getItem("token"),
@@ -64,7 +65,7 @@ var retrieve = function() {
       if(localStorage.key(i) == "ticket" || localStorage.key(i) == "token" || localStorage.key(i) == "uuid"){
         continue;
       }
-      match = localStorage.key(i).match(/^\d (.*)$/i);
+      match = localStorage.key(i).match(/^\d+ (.*)$/i);
       url = match[1];
       prevData[url] = localStorage.getItem(localStorage.key(i));
     }
@@ -74,10 +75,13 @@ var retrieve = function() {
     localStorage.setItem("uuid", uuid);
     $.each(data, function(key, value){
       if(prevData[key] != value){
-        var notification = webkitNotifications.createNotification(
+        match = key.match(/^.*\/(.+)$/);
+        
+        var filename = match[1],
+            notification = webkitNotifications.createNotification(
           'images/stack48.png',  // icon url - can be relative
           'You\'ve got backflipped',  // notification title
-          'The file ' + value + ' has completed.'  // notification body text
+          'The scanning of ' + filename + ' has completed.'  // notification body text
         );
         notification.show();
       }
@@ -86,7 +90,7 @@ var retrieve = function() {
   });
 }
 
-//setInterval(retrieve, 3000);
+setInterval(retrieve, 3000);
 
 // Default Badge Colour
 //chrome.browserAction.onClicked.addListener(function(){
@@ -97,7 +101,7 @@ var retrieve = function() {
 chrome.contextMenus.create({
   "title": "Check link",
   "type": "normal",
-  "contexts": ["image"],
+  "contexts": ["link"],
   "onclick": getClickHandler
 });
 
