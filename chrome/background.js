@@ -74,7 +74,7 @@ var retrieve = function() {
     localStorage.setItem("token", token);
     localStorage.setItem("uuid", uuid);
     $.each(data, function(key, value){
-      if(prevData[key] != value){
+      if(prevData[key] != value && value != "pending"){
         match = key.match(/^.*\/(.+)$/);
         
         var filename = match[1],
