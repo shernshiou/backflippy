@@ -75,10 +75,13 @@ var retrieve = function() {
     localStorage.setItem("uuid", uuid);
     $.each(data, function(key, value){
       if(prevData[key] != value){
-        var notification = webkitNotifications.createNotification(
+        match = key.match(/^.*\/(.+)$/);
+        
+        var filename = match[1],
+            notification = webkitNotifications.createNotification(
           'images/stack48.png',  // icon url - can be relative
           'You\'ve got backflipped',  // notification title
-          'The file ' + value + ' has completed.'  // notification body text
+          'The scanning of ' + filename + ' has completed.'  // notification body text
         );
         notification.show();
       }
