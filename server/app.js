@@ -66,12 +66,16 @@ var createTicket = function(req, res, next) {
 					oauthUuid,
 					oauthTicket,
 					oauthToken
-				).sweep(filename, function(file, status){
+			).sweep(filename, function(file, status){
 				fs.unlink(filename, function(err) {
 					if (err) console.error("Error " + err);
 					console.log("Successfully deleted " + filename);
 				});
-				redisClient.set(requestedUrl, status);
+				if (status[0] != "ok" && status[1]) {
+					redisClient.set(requestedUrl, status[1]);
+				} else {
+					redisClient.set(requestedUrl, "safe");
+				}
 			});
 		});
 	});
